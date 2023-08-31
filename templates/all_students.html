@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Student</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.6.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="max-w-7xl mx-auto">
+    <h1 class="my-4 text-5xl font-semibold text-center">Student Management System</h1>
+    <h3 class="text-xl text-center mb-6">All Student</h3>
+    <div class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {{ range $id, $student := . }}
+        <div class="card card-compact w-96 border-2">
+            <figure><img src="{{ $student.ImageURL }}" alt="Student Image" /></figure>
+            <div class="card-body">
+                <h2 class="card-title">{{ $student.Name }}</h2>
+                <p>Student ID: {{ $student.ID }}</p>
+                <p>CGPA: {{ $student.CGPA }}</p>
+                <p>Career Interest: {{ $student.CareerInterest }}</p>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+    <div class="my-4 mx-4">
+        <a href="/" class="btn btn-primary">Return</a>
+    </div>
+</body>
+</html>

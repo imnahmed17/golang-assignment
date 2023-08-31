@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.6.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function hideAlerts() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 1500);
+            });
+        }
+    </script>
+</head>
+<body class="max-w-7xl mx-auto" onload="hideAlerts()">
+    <h1 class="my-4 text-5xl font-semibold text-center">Student Management System</h1>
+    <!-- Success Alert -->
+    {{ if .SuccessMessage }}
+    <div class="alert alert-success mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>{{ .SuccessMessage }}</span>
+    </div>
+    {{ end }}
+
+    <!-- Error Alert for Student Not Found -->
+    {{ if .NotFoundMessage }}
+    <div class="alert alert-error mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>{{ .NotFoundMessage }}</span>
+    </div>
+    {{ end }}
+
+    <!-- Error Alert for Internal Server Error -->
+    {{ if .ErrorMessage }}
+    <div class="alert alert-error mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>{{ .ErrorMessage }}</span>
+    </div>
+    {{ end }}
+    
+    <div class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Student Data Submission -->
+        <div>
+            <h3 class="text-xl text-center font-medium">Student Data Submission</h3>
+            <form action="/submit" method="post" enctype="multipart/form-data">
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Student ID:</span>
+                    </label>
+                    <input type="number" name="studentID" placeholder="Student ID" class="input input-bordered w-full" />
+                </div>
+    
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Student Name:</span>
+                    </label>
+                    <input type="text" name="studentName" placeholder="Student Name" class="input input-bordered w-full" />
+                </div>
+    
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Student CGPA:</span>
+                    </label>
+                    <input type="number" name="studentCGPA" step="0.01" placeholder="Student CGPA" class="input input-bordered w-full" />
+                </div>
+    
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Career Interest:</span>
+                    </label>
+                    <input type="text" name="careerInterest" placeholder="Student Career Interest" class="input input-bordered w-full" />
+                </div>
+    
+                <div class="form-control w-full">
+                    <label class="label">
+                    <span class="label-text">Image:</span>
+                    </label>
+                    <input type="file" name="image" class="file-input file-input-bordered w-full" />
+                </div>
+    
+                <button class="my-3 btn btn-primary w-full">Submit</button>
+            </form>
+        </div>
+        <!-- Show Student Details -->
+        <div>
+            <h3 class="text-xl text-center font-medium">Show Student Details</h3>
+            <form action="/search-student" method="get">
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Student ID:</span>
+                    </label>
+                    <input type="number" name="searchStudentID" placeholder="Student ID" class="input input-bordered w-full" />
+                </div>
+
+                <button class="my-3 btn btn-primary w-full">Search</button>
+            </form>
+        </div>
+        <!-- Remove Student -->
+        <div>
+            <h3 class="text-xl text-center font-medium">Remove Student</h3>
+            <form action="/delete-student" method="post">
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Student ID:</span>
+                    </label>
+                    <input type="number" name="deleteStudentID" placeholder="Student ID" class="input input-bordered w-full" />
+                </div>
+
+                <button class="my-3 btn btn-primary w-full">Remove</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
