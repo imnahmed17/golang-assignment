@@ -9,9 +9,9 @@
     <h1 class="my-4 text-5xl font-semibold text-center">Student Management System</h1>
     <h3 class="text-xl text-center mb-6">All Student</h3>
     <div class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {{ range $id, $student := . }}
+        {{ range $student := .Students }}
         <div class="card card-compact w-96 border-2">
-            <figure><img src="{{ $student.ImageURL }}" alt="Student Image" /></figure>
+            <figure><img src="{{ $student.ImageURL }}" class="w-48" alt="Student Image" /></figure>
             <div class="card-body">
                 <h2 class="card-title">{{ $student.Name }}</h2>
                 <p>Student ID: {{ $student.ID }}</p>
@@ -21,8 +21,18 @@
         </div>
         {{ end }}
     </div>
-    <div class="my-4 mx-4">
-        <a href="/" class="btn btn-primary">Return</a>
+    <div class="my-4 mx-4 flex justify-between">
+        <div>
+            <a href="/" class="btn btn-primary">Return</a>
+        </div>
+        <div>
+            {{ if .PrevPage }}
+                <a href="/all-student?page={{ .PrevPage }}" class="btn btn-primary">Previous Page</a>
+            {{ end }}
+            {{ if .NextPage }}
+                <a href="/all-student?page={{ .NextPage }}" class="btn btn-primary">Next Page</a>
+            {{ end }}
+        </div>
     </div>
 </body>
 </html>

@@ -18,17 +18,12 @@ type Student struct {
 
 var students = make(map[int]Student)
 
-func serveAllStudent(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/all_students.html")
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	if err := tmpl.Execute(w, students); err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
+func mapToSlice(m map[int]Student) []Student {
+    result := make([]Student, 0, len(m))
+    for _, student := range m {
+        result = append(result, student)
+    }
+    return result
 }
 
 func serveNotFound(w http.ResponseWriter, r *http.Request) {
