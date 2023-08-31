@@ -26,19 +26,28 @@ func serveDeleteStudent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	student, exists := students[deleteID] 
-	if !exists {
+	delete_student_chan := make(chan bool)
+
+	go func () {
+		student, exists := students[deleteID] 
+		if exists {
+			err = os.Remove(strings.TrimLeft(student.ImageURL, "/"))
+			if err != nil {
+				http.Error(w, "Failed to remove file", http.StatusInternalServerError)
+				return
+			}
+
+			delete(students, deleteID)
+		}
+
+		delete_student_chan <- exists
+	}()
+
+	done := <- delete_student_chan
+
+	if done {
+		http.Redirect(w, r, "/?success="+fmt.Sprintf("Student with ID %d deleted successfully", deleteID), http.StatusSeeOther)
+	} else {
 		http.Redirect(w, r, "/?notfound="+fmt.Sprintf("Student with ID %d not found", deleteID), http.StatusSeeOther)
-		return
 	}
-
-    err = os.Remove(strings.TrimLeft(student.ImageURL, "/"))
-    if err != nil {
-        http.Error(w, "Failed to remove file", http.StatusInternalServerError)
-		return
-    }
-
-	delete(students, deleteID)
-
-	http.Redirect(w, r, "/?success="+fmt.Sprintf("Student with ID %d deleted successfully", deleteID), http.StatusSeeOther)
 }

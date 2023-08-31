@@ -69,21 +69,31 @@ func serveSaveStudent(w http.ResponseWriter, r *http.Request) {
 
 	imageURL := "/" + filePath
 
-	if _, exists := students[id]; exists {
+	save_student_chan := make(chan bool) 
+
+	go func() {
+		if _, exists := students[id]; !exists {
+			student := Student{
+				ID:            	id,
+				Name:          	name,
+				CGPA:          	cgpa,
+				CareerInterest: interest,
+				ImageURL:      	imageURL,
+			}
+	
+			students[id] = student
+
+			save_student_chan <- !exists
+		}
+
+		close(save_student_chan)
+	}()
+
+	done := <- save_student_chan
+
+	if done {
+		http.Redirect(w, r, "/?success="+fmt.Sprintf("Student with ID %d added successfully", id), http.StatusSeeOther)
+	} else {
 		http.Redirect(w, r, "/?error="+fmt.Sprintf("Student with ID %d already exists", id), http.StatusSeeOther)
-        return
-    }
-
-	student := Student{
-		ID:            	id,
-		Name:          	name,
-		CGPA:          	cgpa,
-		CareerInterest: interest,
-		ImageURL:      	imageURL,
 	}
-
-	students[id] = student
-
-	// http.Redirect(w, r, "/all-student", http.StatusSeeOther)
-	http.Redirect(w, r, "/?success="+fmt.Sprintf("Student with ID %d added successfully", id), http.StatusSeeOther)
 }

@@ -25,20 +25,27 @@ func serveSearchStudent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	student, exists := students[searchID]
-	if !exists {
-		http.Redirect(w, r, "/?notfound="+fmt.Sprintf("Student with ID %d not found", searchID), http.StatusSeeOther)
-        return
-    }
-
 	tmpl, err := template.ParseFiles("templates/student_details.html")
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	if err := tmpl.Execute(w, student); err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
+	search_student_chan := make(chan Student)
+
+	go func () {
+		student, exists := students[searchID]
+		if exists {
+			search_student_chan <- student
+		}
+
+		close(search_student_chan)
+	}()
+
+	student, exists := <-search_student_chan
+	if !exists {
+		http.Redirect(w, r, "/?notfound="+fmt.Sprintf("Student with ID %d not found", searchID), http.StatusSeeOther)
+	} else {
+		tmpl.Execute(w, student)
 	}
 }
