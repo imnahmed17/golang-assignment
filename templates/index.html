@@ -16,7 +16,20 @@
     </script>
 </head>
 <body class="max-w-7xl mx-auto" onload="hideAlerts()">
-    <h1 class="my-4 text-5xl font-semibold text-center">Student Management System</h1>
+    <!-- Navbar -->
+    <div class="navbar bg-base-200">
+        <div class="flex-1">
+            <div>
+                <a href="/" class="btn btn-ghost normal-case text-4xl hover:bg-base-200">SMS</a>
+                <p class="ml-4 -mt-1 text-xs">Student Management System</p>
+            </div>
+        </div>
+        <div class="flex-none">
+            <ul class="menu menu-horizontal px-1">
+                <li><a href="/all-student">All Student</a></li>
+            </ul>
+        </div>
+    </div>
     <!-- Success Alert -->
     {{ if .SuccessMessage }}
     <div class="alert alert-success mb-2">
@@ -24,7 +37,6 @@
         <span>{{ .SuccessMessage }}</span>
     </div>
     {{ end }}
-
     <!-- Error Alert for Student Not Found -->
     {{ if .NotFoundMessage }}
     <div class="alert alert-error mb-2">
@@ -32,7 +44,6 @@
         <span>{{ .NotFoundMessage }}</span>
     </div>
     {{ end }}
-
     <!-- Error Alert for Internal Server Error -->
     {{ if .ErrorMessage }}
     <div class="alert alert-error mb-2">
@@ -41,7 +52,7 @@
     </div>
     {{ end }}
     
-    <div class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <div class="px-4 my-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         <!-- Student Data Submission -->
         <div>
             <h3 class="text-xl text-center font-medium">Student Data Submission</h3>
